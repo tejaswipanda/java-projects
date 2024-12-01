@@ -2,4 +2,4 @@
 2,20,Tejas
 3,30,Tejaswi
 4,40,Tej
-5,45,Teju
+5,50,Teju
