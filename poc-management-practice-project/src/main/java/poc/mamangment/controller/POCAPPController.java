@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +30,16 @@ public class POCAPPController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(POCAPPController.class);
 
+	@PostMapping("/signUp")
+	@CrossOrigin
 	public ResponseEntity<?> userSignUp(@RequestBody @Valid User user) throws POCAPPException {
+		LOGGER.info("User is valid. Creating database entry");
 		return pocappService.createDatabaseEntry(user);
+	}
+
+	@PostMapping("/resendVerificationMail")
+	@CrossOrigin
+	public ResponseEntity<?> resendVerificationMail(long code, String mail) throws POCAPPException {
+		return emailService.resendVerificationMail(code, mail);
 	}
 }

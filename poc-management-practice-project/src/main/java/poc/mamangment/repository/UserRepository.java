@@ -8,4 +8,6 @@ import poc.mamangment.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
+	User findUserByEmail(String email);
+
 }
