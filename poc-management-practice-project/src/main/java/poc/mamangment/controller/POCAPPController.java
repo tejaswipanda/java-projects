@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import poc.mamangment.exception.POCAPPException;
 import poc.mamangment.model.User;
+import poc.mamangment.reqest.LoginReq;
 import poc.mamangment.service.EmailService;
 import poc.mamangment.service.POCAPPService;
 
@@ -37,7 +38,14 @@ public class POCAPPController {
 		return pocappService.createDatabaseEntry(user);
 	}
 
-	@PostMapping("/resendVerificationMail")
+	@PostMapping("/login")
+	@CrossOrigin
+	public ResponseEntity<?> login(@RequestBody @Valid LoginReq loginReq) throws POCAPPException {
+		LOGGER.info("User is valid. Creating database entry");
+		return pocappService.login(loginReq);
+	}
+
+	@PostMapping("/resendVerificationMail/{code}/{mail}")
 	@CrossOrigin
 	public ResponseEntity<?> resendVerificationMail(long code, String mail) throws POCAPPException {
 		return emailService.resendVerificationMail(code, mail);

@@ -26,7 +26,7 @@ public class JwtUtil {
 		this.jwtParser = Jwts.parser().setSigningKey(SECRET);
 	}
 
-	public static String createToken(User user) {
+	public String createToken(User user) {
 		Claims claims = Jwts.claims().setSubject(user.getEmail());
 		claims.put("firstName", user.getFirstName());
 		claims.put("lastName", user.getLastName());
