@@ -21,8 +21,11 @@ func main() {
 	//var wg sync.WaitGroup
 	startNow := time.Now()
 	wg.Add(1)
-	go intro.AsyncFunction(&wg)
-	wg.Wait() // wait untill all thread gets executed
+	go intro.AsyncFunction(&wg) //Goroutines are lightweight threads managed by the Go runtime. They are incredibly easy to use.
+	wg.Wait()                   // wait untill all thread gets executed
+
+	/*Channels provide a way for goroutines to communicate and synchronize with each other.
+	  They can be thought of as typed conduits through which you can send and receive values*/
 	var bookingsSlice []string
 	for /*we can add condition here too (boolean)*/ {
 		conferenceName := "go conference"
