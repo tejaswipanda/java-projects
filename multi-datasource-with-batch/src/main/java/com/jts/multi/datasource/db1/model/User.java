@@ -26,17 +26,6 @@ public class User {
 
 	private int age;
 
-	public User() {
-		super();
-	}
-
-	public User(int userId, String name, int age) {
-		super();
-		this.userId = userId;
-		this.name = name;
-		this.age = age;
-	}
-
 	public int getUserId() {
 		return userId;
 	}

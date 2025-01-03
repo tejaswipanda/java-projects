@@ -21,6 +21,7 @@ import poc.mamangment.model.User;
 import poc.mamangment.repository.UserRepository;
 import poc.mamangment.reqest.LoginReq;
 import poc.mamangment.response.UseAuthResponse;
+import poc.mamangment.response.UserAuthResponse;
 
 @Service
 public class POCAPPService {
@@ -31,6 +32,12 @@ public class POCAPPService {
 	private JwtUtil jwtUtil;
 
 	private AuthenticationManager authenticationManager;
+
+	public POCAPPService(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+		super();
+		this.jwtUtil = jwtUtil;
+		this.authenticationManager = authenticationManager;
+	}
 
 	public ResponseEntity<?> createDatabaseEntry(@Valid User user) throws POCAPPException {
 		String email = user.getEmail();
@@ -56,7 +63,24 @@ public class POCAPPService {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
 		String email = authentication.getName();
-		return null;
+		User user = userRepository.findUserByEmail(email);
+		if (user == null) {
+			ServiceException serviceException = new ServiceException(Constants.USER_NOT_FOUND_ERR_CODE,
+					Constants.USER_NOT_FOUND_ERR_MSG, HttpStatus.NOT_FOUND);
+			POCAPPException pocappException = new POCAPPException(serviceException);
+			throw pocappException;
+
+		}
+		if ((user.isAdmin() && loginReq.isAdmin()) || (!user.isAdmin() && !loginReq.isAdmin())) {
+			String token = jwtUtil.createToken(user);
+			UserAuthResponse response = new UserAuthResponse(email, token);
+			return ResponseEntity.ok(response);
+		}
+		ServiceException serviceException = new ServiceException(Constants.USER_NOT_FOUND_ERR_CODE,
+				Constants.USER_NOT_FOUND_ERR_MSG, HttpStatus.NOT_FOUND);
+		POCAPPException pocappException = new POCAPPException(serviceException);
+		throw pocappException;
+
 	}
 
 }
